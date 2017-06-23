@@ -6,6 +6,9 @@ class Token(object):
         self.tip = tip
         self.vrednost = vrednost
 
+    def __str__(self):
+        return '{}'.format(self.vrednost)
+
 
 
 class Lexer(object):
@@ -42,7 +45,7 @@ class Lexer(object):
         broj = ''
 
         while self.trenutni is not None and self.trenutni.isdigit():
-            broj =+ self.trenutni
+            broj += self.trenutni
             self.next()
 
         return int(broj)

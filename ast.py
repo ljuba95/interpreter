@@ -17,9 +17,15 @@ class BinarnaOperacija(Node):
         self.operacija = operacija
         self.desno = desno
 
+    def __str__(self):
+        return '{}'.format(self.operacija)
+
 class Broj(Node):
     """
     Cvor koji predstavlja jedan broj.
     """
     def __init__(self,token):
         self.token = token
+
+    def __str__(self):
+        return '{}'.format(self.token)

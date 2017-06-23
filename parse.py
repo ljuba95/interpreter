@@ -1,7 +1,10 @@
-from ast import *
 from tokens import *
+from ast import *
+
+#morao sam da reimenujem file jer python ima built-in module parser, posle sat vremena debug-a -.-
 
 class Parser(object):
+
     """
     
     Gramatika:
@@ -34,11 +37,11 @@ class Parser(object):
         Implementacija "faktor" pravila gramatike.
         :return: cvor tipa Broj ili koren podstabla koje predstavlja "izraz"
         """
-
-        if self.trenutni_token.tip == INTEGER:
+        token = self.trenutni_token
+        if token.tip == INTEGER:
             self.move(INTEGER)
-            return Broj(self.trenutni_token.vrednost)
-        elif self.trenutni_token.tip == LZ:
+            return Broj(token)
+        elif token.tip == LZ:
             self.move(LZ)
             cvor = self.izraz()
             self.move(DZ)
