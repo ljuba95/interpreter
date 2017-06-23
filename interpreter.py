@@ -11,7 +11,8 @@ class Interpreter(object):
 
 
 def main():
-    text = input('prompt>')
+    #text = input('prompt>')
+    text = '2+5*3+(6-2)'
     lexer = Lexer(text)
     parser = Parser(lexer)
     interpreter = Interpreter(parser.parse())
