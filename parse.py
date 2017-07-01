@@ -6,12 +6,11 @@ from ast import *
 class Parser(object):
 
     """
-    
     Gramatika:
     
     izraz -> term ((PLUS | MINUS) term)*
     term -> faktor ((PUTA | PODELJENO) faktor)*
-    faktor -> INTEGER | LZ izraz DZ
+    faktor -> (PLUS | MINUS) faktor | INTEGER | LZ izraz DZ
     """
 
     def __init__(self,lexer):
@@ -35,10 +34,17 @@ class Parser(object):
     def faktor(self):
         """
         Implementacija "faktor" pravila gramatike.
-        :return: cvor tipa Broj ili koren podstabla koje predstavlja "izraz"
+        :return: cvor tipa UnarnaOperacija, 
+        cvor tipa Broj ili koren podstabla koje predstavlja "izraz"
         """
         token = self.trenutni_token
-        if token.tip == INTEGER:
+        if token.tip == PLUS:
+            self.move(PLUS)
+            return UnarnaOperacija(token,self.faktor())
+        elif token.tip == MINUS:
+            self.move(MINUS)
+            return UnarnaOperacija(token,self.faktor())
+        elif token.tip == INTEGER:
             self.move(INTEGER)
             return Broj(token)
         elif token.tip == LZ:

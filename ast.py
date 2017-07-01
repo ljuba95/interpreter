@@ -20,6 +20,20 @@ class BinarnaOperacija(Node):
     def __str__(self):
         return '{}'.format(self.operacija)
 
+
+class UnarnaOperacija(Node):
+    """
+    Cvor koji predstavlja unarnu operaciju.
+    Sadrzi token operacije(PLUS | MINUS) i pokazivac na izraz (sledeci cvor u ast).
+    """
+    def __init__(self,operacija,izraz):
+        self.operacija = operacija
+        self.izraz = izraz
+
+    def __str__(self):
+        return '{}'.format(self.operacija)
+
+
 class Broj(Node):
     """
     Cvor koji predstavlja jedan broj.

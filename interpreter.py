@@ -19,6 +19,9 @@ class Interpreter(Visitor):
 
     def __init__(self,parser):
         self.parser = parser
+        self.stablo = parser.parse()
+
+    #metode za evaluaciju cvorova ast-a po visitor pattern-u
 
     def poseti_BinarnaOperacija(self,cvor):
         if cvor.operacija.tip == PLUS:
@@ -30,35 +33,44 @@ class Interpreter(Visitor):
         if cvor.operacija.tip == PODELJENO:
             return self.poseti(cvor.levo) / self.poseti(cvor.desno)
 
+    def poseti_UnarnaOperacija(self,cvor):
+        if cvor.operacija.tip == PLUS:
+            return self.poseti(cvor.izraz)
+        else:
+            return -self.poseti(cvor.izraz)
+
+
     def poseti_Broj(self,cvor):
         return cvor.token.vrednost
 
     def izvrsi(self):
-        return self.poseti(self.parser.parse())
+        return self.poseti(self.stablo)
 
-"""
+
 def prikazLKD(koren):
     if koren is None:
         return
 
     if type(koren) is BinarnaOperacija:
         prikazLKD(koren.levo)
-
         print(koren)
         prikazLKD(koren.desno)
+    elif type(koren) is UnarnaOperacija:
+        print(koren)
+        prikazLKD(koren.izraz)
     else:
         print(koren)
-"""
+
 
 
 def main():
     #text = input('prompt>')
-    text = '2+5*3+(3+5)/2'
+    text = '2+5*(-3)+(3+5)/-2'
     lexer = Lexer(text)
     parser = Parser(lexer)
     interpreter = Interpreter(parser)
     print(interpreter.izvrsi())
-    #prikazLKD(parser.parse())
+    prikazLKD(interpreter.stablo)
 
 
 
