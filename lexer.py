@@ -38,6 +38,38 @@ class Lexer(object):
             self.next()
 
 
+    def peek(self):
+        """
+        zaviri u sledeci karakter(zbog := prvenstveno)
+        :return: karakter sa sledece pozicije
+        """
+        if self.pozicija + 1 > len(self.code) - 1:
+            return None
+        else:
+            return self.code[self.pozicija + 1]
+
+    def _id(self):
+        """
+        funkcija vraca token sa nazivom identifikatora
+        (bilo koja rec - promenljiva i rezervisane reci)
+        :return: Token(ID)
+        """
+        naziv = ''
+        while self.trenutni is not None and self.trenutni.isalnum():
+            naziv += self.trenutni
+            self.next()
+
+        #case insensitive
+        naziv = naziv.upper()
+
+        #zbog rezervisanih reci
+        if naziv == 'BEGIN':
+            return Token(BEGIN,'BEGIN')
+        elif naziv == 'END':
+            return Token(END,'END')
+        else:
+            return Token(ID,naziv)
+
     def integer(self):
         """funkcija koja vraca integer
             koji se sastoji od vise cifara"""
@@ -61,8 +93,20 @@ class Lexer(object):
                 self.preskoci_space()
                 continue
 
+            if self.trenutni.isalpha():
+                return self._id()
+
             if self.trenutni.isdigit():
                 return Token(INTEGER,self.integer())
+
+            if self.trenutni == ':' and self.peek() == '=':
+                self.next()
+                self.next()
+                return Token(ASSIGN,':=')
+
+            if self.trenutni == ';':
+                self.next()
+                return Token(SEMI,';')
 
             if self.trenutni == '+':
                 self.next()
@@ -87,6 +131,11 @@ class Lexer(object):
             if self.trenutni == ')':
                 self.next()
                 return Token(DZ,')')
+
+            if self.trenutni == '.':
+                self.next()
+                return Token(TACKA,'.')
+
 
 
         return Token(EOF,None)

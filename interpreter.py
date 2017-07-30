@@ -17,11 +17,33 @@ class Visitor(object):
 
 class Interpreter(Visitor):
 
+    GLOBAL = {}
+
     def __init__(self,parser):
         self.parser = parser
         self.stablo = parser.parse()
 
     #metode za evaluaciju cvorova ast-a po visitor pattern-u
+
+    def poseti_Compound(self,cvor):
+        for dete in cvor.deca:
+            self.poseti(dete)
+
+    def poseti_NoOp(self,cvor):
+        pass
+
+    def poseti_Assign(self,cvor):
+        ime = cvor.levo.vrednost
+        self.GLOBAL[ime] = self.poseti(cvor.desno)
+
+    def poseti_Var(self,cvor):
+        ime = cvor.vrednost
+        vrednost = self.GLOBAL.get(ime)
+
+        if vrednost is None:
+            raise NameError(repr(ime))
+        else:
+            return vrednost
 
     def poseti_BinarnaOperacija(self,cvor):
         if cvor.operacija.tip == PLUS:
@@ -65,12 +87,21 @@ def prikazLKD(koren):
 
 def main():
     #text = input('prompt>')
-    text = '2+5*(-3)+(3+5)/-2'
+    text = """
+    BEGIN
+        BEGIN
+            a := 5;
+            b := a - 2;
+        END;
+        x := 11;
+    END.
+    """
     lexer = Lexer(text)
     parser = Parser(lexer)
     interpreter = Interpreter(parser)
-    print(interpreter.izvrsi())
-    prikazLKD(interpreter.stablo)
+    interpreter.izvrsi()
+    print(interpreter.GLOBAL)
+    #prikazLKD(interpreter.stablo)
 
 
 

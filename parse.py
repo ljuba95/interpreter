@@ -8,9 +8,26 @@ class Parser(object):
     """
     Gramatika:
     
+    program -> compound_statement TACKA
+    
+    compound_statement -> BEGIN statement_list END
+    
+    statement_list -> statement | statement SEMI statement_list
+    
+    statement -> compound_statement | assign_statement | empty
+    
+    empty ->
+    
+    assign_statement -> promenljiva ASSIGN izraz
+    
     izraz -> term ((PLUS | MINUS) term)*
+    
     term -> faktor ((PUTA | PODELJENO) faktor)*
-    faktor -> (PLUS | MINUS) faktor | INTEGER | LZ izraz DZ
+    
+    faktor -> (PLUS | MINUS) faktor | INTEGER | LZ izraz DZ | promenljiva
+    
+    promenljiva -> ID
+    
     """
 
     def __init__(self,lexer):
@@ -30,6 +47,100 @@ class Parser(object):
             self.trenutni_token = self.lexer.next_token()
         else:
             self.greska()
+
+    def program(self):
+        """
+        program pravilo gramatike.
+        Glavna funkcija koja vraca parsno stablo.
+        :return: AST root
+        """
+
+        cvor = self.compound_statement()
+        self.move(TACKA)
+        return cvor
+
+    def compound_statement(self):
+        """
+        compound_statement pravilo gramatike impl.
+        Vraca Compound cvor koji sadrzi listu statement-a.
+        :return: Compound node
+        """
+
+        self.move(BEGIN)
+        stmt_list = self.statement_list()
+        self.move(END)
+
+        koren = Compound()
+
+        for stmt in stmt_list:
+            koren.deca.append(stmt)
+
+        return koren
+
+    def statement_list(self):
+        """
+        statement_list pravilo gramatike impl.
+        Vraca listu statement-a u okviru jednog begin-end bloka.
+        :return: statement list
+        """
+
+        lista = [self.statement()]
+
+        while self.trenutni_token.tip == SEMI:
+            self.move(SEMI)
+            lista.append(self.statement())
+
+        return lista
+
+    def statement(self):
+        """
+        statement pravilo gramatike impl.
+        Vraca cvor(compound, assign ili empty)
+        """
+
+        if self.trenutni_token.tip == BEGIN:
+            cvor = self.compound_statement()
+        elif self.trenutni_token.tip == ID:
+            cvor = self.assign_statement()
+        else:
+            cvor = self.empty()
+
+        return cvor
+
+    def assign_statement(self):
+        """
+        assign_statement pravilo gramatike impl.
+        Vraca cvor tipa Assign(ex. a := 5)
+        :return: Assign Node
+        """
+
+        var = self.promenljiva()
+        token = self.trenutni_token
+        self.move(ASSIGN)
+        izraz = self.izraz()
+
+        return Assign(var,token,izraz)
+
+    def promenljiva(self):
+        """
+        promenljiva pravilo gramatike impl.
+        Vraca cvor tipa Var
+        :return: Var Node
+        """
+
+        cvor = Var(self.trenutni_token)
+        self.move(ID)
+        return cvor
+
+    def empty(self):
+        """
+        empty pravilo gramatike impl.
+        Vraca NoOp cvor(ex 'BEGIN END.' je validan program).
+        :return: NoOp Node
+        """
+
+        return NoOp()
+
 
     def faktor(self):
         """
@@ -52,6 +163,8 @@ class Parser(object):
             cvor = self.izraz()
             self.move(DZ)
             return cvor
+        elif token.tip == ID:
+            return self.promenljiva()
 
     def term(self):
         """
@@ -93,4 +206,4 @@ class Parser(object):
 
 
     def parse(self):
-        return self.izraz()
+        return self.program()

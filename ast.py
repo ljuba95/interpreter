@@ -43,3 +43,37 @@ class Broj(Node):
 
     def __str__(self):
         return '{}'.format(self.token)
+
+
+class Var(Node):
+    """
+    Cvor predstavlja promenljivu.
+    """
+    def __init__(self,token):
+        self.token = token
+        self.vrednost = token.vrednost
+
+class Compound(Node):
+    """
+    Cvor predstavlja jedan BEGIN-END blok.
+    Niz deca sadrzi adrese statement-a tog bloka.
+    """
+    def __init__(self):
+        self.deca = []
+
+class Assign(Node):
+    """
+    Cvor predstavlja operaciju dodele vrednosti.
+    Operacija predstavlja token dodele.
+    """
+    def __init__(self,levo,operacija,desno):
+        self.levo = levo
+        self.token = operacija
+        self.desno = desno
+
+class NoOp(Node):
+    """
+    Cvor koji odgovara empty pravilu gramatike.
+    Zbog toga sto je i 'BEGIN END.' validan program.
+    """
+    pass
