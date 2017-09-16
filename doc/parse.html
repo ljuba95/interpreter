@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module parse</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>parse</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cgit%5Cinterpreter%5Cparse.py">d:\git\interpreter\parse.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="parse.html#Parser">Parser</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Parser">class <strong>Parser</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Gramatika:<br>
+&nbsp;<br>
+program&nbsp;-&gt;&nbsp;compound_statement&nbsp;TACKA<br>
+&nbsp;<br>
+compound_statement&nbsp;-&gt;&nbsp;BEGIN&nbsp;statement_list&nbsp;END<br>
+&nbsp;<br>
+statement_list&nbsp;-&gt;&nbsp;statement&nbsp;|&nbsp;statement&nbsp;SEMI&nbsp;statement_list<br>
+&nbsp;<br>
+statement&nbsp;-&gt;&nbsp;compound_statement&nbsp;|&nbsp;assign_statement&nbsp;|&nbsp;empty<br>
+&nbsp;<br>
+empty&nbsp;-&gt;<br>
+&nbsp;<br>
+assign_statement&nbsp;-&gt;&nbsp;promenljiva&nbsp;ASSIGN&nbsp;izraz<br>
+&nbsp;<br>
+izraz&nbsp;-&gt;&nbsp;term&nbsp;((PLUS&nbsp;|&nbsp;MINUS)&nbsp;term)*<br>
+&nbsp;<br>
+term&nbsp;-&gt;&nbsp;faktor&nbsp;((PUTA&nbsp;|&nbsp;PODELJENO)&nbsp;faktor)*<br>
+&nbsp;<br>
+faktor&nbsp;-&gt;&nbsp;(PLUS&nbsp;|&nbsp;MINUS)&nbsp;faktor&nbsp;|&nbsp;INTEGER&nbsp;|&nbsp;LZ&nbsp;izraz&nbsp;DZ&nbsp;|&nbsp;promenljiva<br>
+&nbsp;<br>
+promenljiva&nbsp;-&gt;&nbsp;ID<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Parser-__init__"><strong>__init__</strong></a>(self, lexer)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Parser-assign_statement"><strong>assign_statement</strong></a>(self)</dt><dd><tt>assign_statement&nbsp;pravilo&nbsp;gramatike&nbsp;impl.<br>
+Vraca&nbsp;cvor&nbsp;tipa&nbsp;Assign(ex.&nbsp;a&nbsp;:=&nbsp;5)<br>
+:return:&nbsp;Assign&nbsp;Node</tt></dd></dl>
+
+<dl><dt><a name="Parser-compound_statement"><strong>compound_statement</strong></a>(self)</dt><dd><tt>compound_statement&nbsp;pravilo&nbsp;gramatike&nbsp;impl.<br>
+Vraca&nbsp;Compound&nbsp;cvor&nbsp;koji&nbsp;sadrzi&nbsp;listu&nbsp;statement-a.<br>
+:return:&nbsp;Compound&nbsp;node</tt></dd></dl>
+
+<dl><dt><a name="Parser-empty"><strong>empty</strong></a>(self)</dt><dd><tt>empty&nbsp;pravilo&nbsp;gramatike&nbsp;impl.<br>
+Vraca&nbsp;NoOp&nbsp;cvor(ex&nbsp;'BEGIN&nbsp;END.'&nbsp;je&nbsp;validan&nbsp;program).<br>
+:return:&nbsp;NoOp&nbsp;Node</tt></dd></dl>
+
+<dl><dt><a name="Parser-faktor"><strong>faktor</strong></a>(self)</dt><dd><tt>Implementacija&nbsp;"faktor"&nbsp;pravila&nbsp;gramatike.<br>
+:return:&nbsp;cvor&nbsp;tipa&nbsp;UnarnaOperacija,&nbsp;<br>
+cvor&nbsp;tipa&nbsp;Broj&nbsp;ili&nbsp;koren&nbsp;podstabla&nbsp;koje&nbsp;predstavlja&nbsp;"izraz"</tt></dd></dl>
+
+<dl><dt><a name="Parser-greska"><strong>greska</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Parser-izraz"><strong>izraz</strong></a>(self)</dt><dd><tt>Implementacija&nbsp;"izraz"&nbsp;pravila&nbsp;gramatike.<br>
+:return:&nbsp;koren&nbsp;podstabla&nbsp;koje&nbsp;predstavlja&nbsp;"izraz"</tt></dd></dl>
+
+<dl><dt><a name="Parser-move"><strong>move</strong></a>(self, token)</dt><dd><tt>Pomera&nbsp;se&nbsp;na&nbsp;sledeci&nbsp;token.<br>
+:param&nbsp;token:&nbsp;tip&nbsp;trenutnog&nbsp;tokena</tt></dd></dl>
+
+<dl><dt><a name="Parser-parse"><strong>parse</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Parser-program"><strong>program</strong></a>(self)</dt><dd><tt>program&nbsp;pravilo&nbsp;gramatike.<br>
+Glavna&nbsp;funkcija&nbsp;koja&nbsp;vraca&nbsp;parsno&nbsp;stablo.<br>
+:return:&nbsp;AST&nbsp;root</tt></dd></dl>
+
+<dl><dt><a name="Parser-promenljiva"><strong>promenljiva</strong></a>(self)</dt><dd><tt>promenljiva&nbsp;pravilo&nbsp;gramatike&nbsp;impl.<br>
+Vraca&nbsp;cvor&nbsp;tipa&nbsp;Var<br>
+:return:&nbsp;Var&nbsp;Node</tt></dd></dl>
+
+<dl><dt><a name="Parser-statement"><strong>statement</strong></a>(self)</dt><dd><tt>statement&nbsp;pravilo&nbsp;gramatike&nbsp;impl.<br>
+Vraca&nbsp;cvor(compound,&nbsp;assign&nbsp;ili&nbsp;empty)</tt></dd></dl>
+
+<dl><dt><a name="Parser-statement_list"><strong>statement_list</strong></a>(self)</dt><dd><tt>statement_list&nbsp;pravilo&nbsp;gramatike&nbsp;impl.<br>
+Vraca&nbsp;listu&nbsp;statement-a&nbsp;u&nbsp;okviru&nbsp;jednog&nbsp;begin-end&nbsp;bloka.<br>
+:return:&nbsp;statement&nbsp;list</tt></dd></dl>
+
+<dl><dt><a name="Parser-term"><strong>term</strong></a>(self)</dt><dd><tt>Implementacija&nbsp;"term"&nbsp;pravila&nbsp;gramatike.<br>
+:return:&nbsp;koren&nbsp;podstabla&nbsp;koje&nbsp;predstavlja&nbsp;"term"</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>ASSIGN</strong> = 'ASSIGN'<br>
+<strong>BEGIN</strong> = 'BEGIN'<br>
+<strong>DZ</strong> = ')'<br>
+<strong>END</strong> = 'END'<br>
+<strong>EOF</strong> = 'EOF'<br>
+<strong>ID</strong> = 'ID'<br>
+<strong>INTEGER</strong> = 'INTEGER'<br>
+<strong>LZ</strong> = '('<br>
+<strong>MINUS</strong> = 'MINUS'<br>
+<strong>PLUS</strong> = 'PLUS'<br>
+<strong>PODELJENO</strong> = 'PODELJENO'<br>
+<strong>PUTA</strong> = 'PUTA'<br>
+<strong>SEMI</strong> = 'SEMI'<br>
+<strong>TACKA</strong> = 'TACKA'</td></tr></table>
+</body></html>
